@@ -1,4 +1,5 @@
 import random
+from typing import List
 from micrograd.engine import Value
 
 
@@ -17,8 +18,9 @@ class Neuron(Module):
         self.b = Value(0)
         self.nonlin = nonlin
 
-    def __call__(self, x):
-        act = sum((wi * xi for wi, xi in zip(self.w, x)), self.b)
+    def __call__(self, x: List[Value]):
+        # assert len(self.w) == len(x), f"len(input) ({len(x)}) != len(neuron) ({len(self.w)})"
+        act = sum((wi * xi for wi, xi in zip(self.w, x, strict=True)), self.b)
         return act.relu() if self.nonlin else act
 
     def parameters(self):
